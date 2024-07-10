@@ -7,8 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,11 +24,12 @@ class TokenServiceTest {
 
   @BeforeEach
   void setUp() {
+    MockitoAnnotations.initMocks(this);
+
+    ReflectionTestUtils.setField(tokenService, "secret", "1234567");
     user = new User();
     user.setEmail("test@gmail.com");
     user.setPassword("123");
-
-    MockitoAnnotations.initMocks(this);
   }
 
   @Test
