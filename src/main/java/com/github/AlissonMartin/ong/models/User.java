@@ -1,15 +1,12 @@
 package com.github.AlissonMartin.ong.models;
 
+import com.github.AlissonMartin.ong.enums.Role;
 import jakarta.persistence.*;
 
 
 @Entity
 @Table(name = "users")
 public class User {
-
-    public enum Role {
-        USER, INSTITUTION, ADMIN
-    }
 
     @Id
     @GeneratedValue
