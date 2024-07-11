@@ -8,11 +8,13 @@ import com.github.AlissonMartin.ong.repositories.UserRepository;
 import com.github.AlissonMartin.ong.services.TokenService;
 import com.github.AlissonMartin.ong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -34,7 +36,7 @@ public class AuthenticationController {
     Optional<User> user = userRepository.findByEmail(body.email());
 
     if (user.isEmpty()) {
-      return ResponseEntity.badRequest().body("Usuário não encontrado.");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
     }
 
     String token = tokenService.generateToken(user.get());
@@ -48,6 +50,6 @@ public class AuthenticationController {
 
     String token = tokenService.generateToken(user);
 
-    return ResponseEntity.ok(new RegisterResponseDTO(user.getName(), user.getEmail(), user.getFederalTaxId(), user.getFederalTaxId(), token));
+    return ResponseEntity.ok(new RegisterResponseDTO(user.getName(), user.getEmail(), user.getFederalTaxId(), user.getRole().toString(), token));
   }
 }
