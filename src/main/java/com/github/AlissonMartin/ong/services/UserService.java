@@ -1,11 +1,20 @@
 package com.github.AlissonMartin.ong.services;
 
 import com.github.AlissonMartin.ong.dtos.RegisterRequestDTO;
+import com.github.AlissonMartin.ong.dtos.UserDetailResponseDTO;
+import com.github.AlissonMartin.ong.dtos.UserListRequestDTO;
+import com.github.AlissonMartin.ong.dtos.UserListResponseDTO;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,5 +35,21 @@ public class UserService {
     newUser.setRole(data.role());
 
     return userRepository.save(newUser);
+  }
+
+  public List<UserListResponseDTO> list(UserListRequestDTO data) {
+    Pageable pageable = PageRequest.of(data.page(), data.size());
+
+    Page<User> userPage = userRepository.findUsersWithFilters(data.search(), pageable);
+
+    return userPage.map(user -> {
+        return new UserListResponseDTO(user.getName(), user.getEmail());
+    }).stream().toList();
+  }
+
+  public UserDetailResponseDTO findByUsername(String username) {
+    Optional<User> userOptional = userRepository.findByUsername(username);
+
+    return userOptional.map(user -> new UserDetailResponseDTO(user.getName(), user.getEmail())).orElse(null);
   }
 }

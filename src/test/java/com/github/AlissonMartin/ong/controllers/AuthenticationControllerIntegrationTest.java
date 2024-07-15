@@ -25,8 +25,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Optional;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-
 @WebMvcTest(AuthenticationController.class)
 class AuthenticationControllerIntegrationTest {
 

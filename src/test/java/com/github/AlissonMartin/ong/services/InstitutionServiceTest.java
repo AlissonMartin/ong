@@ -2,11 +2,13 @@ package com.github.AlissonMartin.ong.services;
 
 import com.github.AlissonMartin.ong.models.Institution;
 import com.github.AlissonMartin.ong.repositories.InstitutionRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,11 @@ class InstitutionServiceTest {
 
   @InjectMocks
   InstitutionService institutionService;
+
+  @BeforeEach
+  void setUp() {
+    MockitoAnnotations.initMocks(this);
+  }
 
   @Test
   @DisplayName("should return a list of institutions")
