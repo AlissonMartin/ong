@@ -2,6 +2,7 @@ package com.github.AlissonMartin.ong.models;
 
 import jakarta.persistence.*;
 
+import java.math.BigInteger;
 import java.util.Set;
 
 @Entity
@@ -10,18 +11,14 @@ public class City {
 
     @Id
     @GeneratedValue
-    private int id;
+    private BigInteger id;
 
     private String name;
-
-    private int ibge_id;
-
-    private String slug;
 
     @ManyToOne
     @JoinColumn(name = "state_id")
     private State state;
 
-    @OneToMany
+    @OneToMany(mappedBy = "city")
     private Set<Institution> institutions;
 }

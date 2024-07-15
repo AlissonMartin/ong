@@ -16,8 +16,6 @@ public class State {
 
     private String slug;
 
-    private int ibge_id;
-
-    @OneToMany
+    @OneToMany(mappedBy = "state")
     private Set<Institution> institutions;
 }
