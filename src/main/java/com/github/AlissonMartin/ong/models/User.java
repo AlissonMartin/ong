@@ -1,5 +1,6 @@
 package com.github.AlissonMartin.ong.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.AlissonMartin.ong.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,18 +17,23 @@ public class User {
     @GeneratedValue
     private int id;
 
+    @JsonProperty("name")
     private String name;
 
     @Column(unique = true)
     private String username;
 
+    @JsonProperty("email")
     @Column(unique = true)
     private String email;
 
+    @JsonProperty("password")
     private String password;
 
+    @JsonProperty("federal_tax_id")
     private String federalTaxId;
 
+    @JsonProperty("role")
     @Enumerated(EnumType.ORDINAL)
     private Role role;
 }

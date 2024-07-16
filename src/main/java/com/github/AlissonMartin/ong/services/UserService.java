@@ -1,5 +1,7 @@
 package com.github.AlissonMartin.ong.services;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.AlissonMartin.ong.dtos.*;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.User;
@@ -46,12 +48,24 @@ public class UserService {
   }
 
   public UserDetailResponseDTO findByUsername(String username) {
-    Optional<User> userOptional = userRepository.findByUsername(username);
+    User user = userRepository.findByUsername(username).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
 
-    return userOptional.map(user -> new UserDetailResponseDTO(user.getName(), user.getEmail())).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
+    return new UserDetailResponseDTO(user.getName(), user.getEmail());
   }
 
-  public void update(int id, UpdateUserRequestDTO data) {
+  public UserDetailResponseDTO update(int id, UpdateUserRequestDTO data) {
+    User user = userRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    try {
+      objectMapper.updateValue(user, data);
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao atualizar o usuário", e);
+    }
+
+    userRepository.save(user);
+
+    return new UserDetailResponseDTO(user.getName(), user.getEmail());
   }
 }
