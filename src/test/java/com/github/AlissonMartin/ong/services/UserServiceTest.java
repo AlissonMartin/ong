@@ -6,6 +6,7 @@ import com.github.AlissonMartin.ong.dtos.UserDetailResponseDTO;
 import com.github.AlissonMartin.ong.dtos.UserListRequestDTO;
 import com.github.AlissonMartin.ong.dtos.UserListResponseDTO;
 import com.github.AlissonMartin.ong.enums.Role;
+import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,5 +106,18 @@ class UserServiceTest {
     UserDetailResponseDTO result = userService.findByUsername(username);
 
     assertEquals(result.email(), newUser.getEmail());
+  }
+
+  @Test
+  @DisplayName("should return a exception if user is not found")
+  public void getByUsernameException() {
+
+    Mockito.when(userRepository.findByUsername("test")).thenReturn(Optional.empty());
+
+    RecordNotFoundException thrown = assertThrows(
+            RecordNotFoundException.class,
+            () -> userService.findByUsername("test")
+    );
+
   }
 }

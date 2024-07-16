@@ -1,9 +1,7 @@
 package com.github.AlissonMartin.ong.services;
 
-import com.github.AlissonMartin.ong.dtos.RegisterRequestDTO;
-import com.github.AlissonMartin.ong.dtos.UserDetailResponseDTO;
-import com.github.AlissonMartin.ong.dtos.UserListRequestDTO;
-import com.github.AlissonMartin.ong.dtos.UserListResponseDTO;
+import com.github.AlissonMartin.ong.dtos.*;
+import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +48,10 @@ public class UserService {
   public UserDetailResponseDTO findByUsername(String username) {
     Optional<User> userOptional = userRepository.findByUsername(username);
 
-    return userOptional.map(user -> new UserDetailResponseDTO(user.getName(), user.getEmail())).orElse(null);
+    return userOptional.map(user -> new UserDetailResponseDTO(user.getName(), user.getEmail())).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
+  }
+
+  public void update(int id, UpdateUserRequestDTO data) {
+
   }
 }
