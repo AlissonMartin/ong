@@ -1,10 +1,9 @@
 package com.github.AlissonMartin.ong.services;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import com.github.AlissonMartin.ong.dtos.RegisterRequestDTO;
-import com.github.AlissonMartin.ong.dtos.UserDetailResponseDTO;
-import com.github.AlissonMartin.ong.dtos.UserListRequestDTO;
-import com.github.AlissonMartin.ong.dtos.UserListResponseDTO;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.AlissonMartin.ong.dtos.*;
 import com.github.AlissonMartin.ong.enums.Role;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.User;
@@ -50,6 +49,7 @@ class UserServiceTest {
   }
 
   @Test
+  @DisplayName("should create a user and return it")
   void create() {
     User mockUser = new User();
     mockUser.setEmail("test@gmail.com");
@@ -69,11 +69,10 @@ class UserServiceTest {
   @Test
   @DisplayName("should return a list of users")
   public void listWithFilter() {
-    int page = 1;
+    int page = 0;
     int size = 20;
     String query = null;
-    UserListRequestDTO userListRequestDTO = new UserListRequestDTO(query, page, size);
-
+    UserListRequestDTO userListRequestDTO = new UserListRequestDTO(query, size, page);
     List<User> users = new ArrayList<>();
 
     Pageable pageable = PageRequest.of(page, size);
@@ -84,12 +83,16 @@ class UserServiceTest {
 
     Page<User> userPage = new PageImpl<>(users, PageRequest.of(page, size), users.size());
 
+    List<UserListResponseDTO> userListResponseDTO = userPage.map(user -> {
+      return new UserListResponseDTO(user.getName(), user.getEmail());
+    }).getContent();
+
     Mockito.when(userRepository.findUsersWithFilters(query, pageable)).thenReturn(userPage);
 
     List<UserListResponseDTO> result = userService.list(userListRequestDTO);
 
     assertEquals(size, result.size());
-    assertEquals(users, result);
+    assertEquals(userListResponseDTO, result);
   }
 
   @Test
@@ -118,6 +121,27 @@ class UserServiceTest {
             RecordNotFoundException.class,
             () -> userService.findByUsername("test")
     );
+
+  }
+
+  @Test
+  @DisplayName("should update an user and return it")
+  public void updateUser() throws JsonMappingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    User user = new User();
+    user.setName("test1");
+    user.setFederalTaxId("999.999.999-00");
+    UpdateUserRequestDTO data = new UpdateUserRequestDTO("test2", null, "123.456.789-00");
+
+    Mockito.when(userRepository.findByUsername("test")).thenReturn(Optional.of(user));
+
+    User updatedUser = objectMapper.updateValue(user, data);
+
+    UserDetailResponseDTO userDetailResponseDTO = new UserDetailResponseDTO(updatedUser.getName(), updatedUser.getEmail());
+
+    UserDetailResponseDTO updatedUserResponse = userService.update(1, data);
+
+    assertEquals(updatedUserResponse, userDetailResponseDTO);
 
   }
 }
