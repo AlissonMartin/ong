@@ -15,6 +15,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
   public Optional<User> findByUsername(String username);
 
-  @Query("SELECT u FROM Institution u WHERE u.name LIKE %:search%")
+  @Query("SELECT u FROM User u WHERE u.name LIKE %:search%")
   Page<User> findUsersWithFilters(@Param("search") String search, Pageable pageable);
 }

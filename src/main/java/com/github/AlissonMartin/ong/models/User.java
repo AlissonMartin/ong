@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -36,4 +38,7 @@ public class User {
     @JsonProperty("role")
     @Enumerated(EnumType.ORDINAL)
     private Role role;
+
+    @OneToMany
+    private List<UserAchievement> userAchievements;
 }

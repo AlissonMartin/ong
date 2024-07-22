@@ -142,6 +142,5 @@ class UserServiceTest {
     UserDetailResponseDTO updatedUserResponse = userService.update(1, data);
 
     assertEquals(updatedUserResponse, userDetailResponseDTO);
-
   }
 }
