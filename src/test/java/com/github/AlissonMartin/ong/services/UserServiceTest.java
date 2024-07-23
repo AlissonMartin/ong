@@ -96,7 +96,7 @@ class UserServiceTest {
   }
 
   @Test
-  @DisplayName("should user with the username")
+  @DisplayName("should get user with the username")
   public void getByUsername() {
     String username = "test";
     String email = "test@gmail.com";

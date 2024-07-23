@@ -1,5 +1,6 @@
 package com.github.AlissonMartin.ong.services;
 
+import com.github.AlissonMartin.ong.dtos.InstitutionListResponseDTO;
 import com.github.AlissonMartin.ong.models.Institution;
 import com.github.AlissonMartin.ong.repositories.InstitutionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +52,7 @@ class InstitutionServiceTest {
 
     Mockito.when(institutionRepository.findInstitutionsWithFilters(query, pageable)).thenReturn(institutionPage);
 
-    List<Institution> result = institutionService.list(query, page, size);
+    List<InstitutionListResponseDTO> result = institutionService.list(query, page, size);
 
     assertEquals(size, result.size());
     assertEquals(institutions, result);

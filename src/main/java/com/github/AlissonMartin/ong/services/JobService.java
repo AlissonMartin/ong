@@ -1,6 +1,9 @@
 package com.github.AlissonMartin.ong.services;
 
+import com.github.AlissonMartin.ong.dtos.JobDetailResponseDTO;
 import com.github.AlissonMartin.ong.dtos.JobListRequest;
+import com.github.AlissonMartin.ong.dtos.JobListResponseDTO;
+import com.github.AlissonMartin.ong.dtos.UserListResponseDTO;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.Job;
 import com.github.AlissonMartin.ong.repositories.JobRepository;
@@ -18,18 +21,20 @@ public class JobService {
     @Autowired
     JobRepository jobRepository;
 
-    public List<Job> list(JobListRequest data) {
+    public List<JobListResponseDTO> list(JobListRequest data) {
         Pageable pageable = PageRequest.of(data.page(), data.size());
 
         Page<Job> jobs = jobRepository.findJobsWithFilters(data.search(), pageable);
 
-        return jobs.getContent().stream().toList();
+        return jobs.map(job -> {
+            return new JobListResponseDTO(job.getName(), job.getDescription());
+        }).stream().toList();
     }
 
-    public Job getById(int id) {
+    public JobDetailResponseDTO getById(int id) {
         Job job = jobRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Trabalho não encontrado."));
 
-        return job;
+        return new JobDetailResponseDTO(job.getName(), job.getDescription());
     }
 
 }

@@ -1,5 +1,10 @@
 package com.github.AlissonMartin.ong.services;
 
+import com.github.AlissonMartin.ong.dtos.InstitutionDetailResponseDTO;
+import com.github.AlissonMartin.ong.dtos.InstitutionListResponseDTO;
+import com.github.AlissonMartin.ong.dtos.JobDetailResponseDTO;
+import com.github.AlissonMartin.ong.dtos.JobListResponseDTO;
+import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.Institution;
 import com.github.AlissonMartin.ong.repositories.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +22,19 @@ public class InstitutionService {
   @Autowired
   InstitutionRepository institutionRepository;
 
-  public List<Institution> list(String search, int page, int size) {
+  public List<InstitutionListResponseDTO> list(String search, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
 
     Page<Institution> institutionsPage = institutionRepository.findInstitutionsWithFilters(search, pageable);
-    return institutionsPage.getContent().stream().toList();
+
+    return institutionsPage.map(institution -> {
+      return new InstitutionListResponseDTO(institution.getName(), institution.getDescription());
+    }).stream().toList();
   }
 
-  public Optional<Institution> getById(int id) {
-    return institutionRepository.findById(id);
+  public InstitutionDetailResponseDTO getById(int id) {
+    Institution institution =  institutionRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Instituicão não encontrada."));
+
+    return new InstitutionDetailResponseDTO(institution.getName(), institution.getDescription());
   }
 }
