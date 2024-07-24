@@ -1,11 +1,8 @@
 package com.github.AlissonMartin.ong.controllers;
 
 import com.github.AlissonMartin.ong.dtos.InstitutionDetailResponseDTO;
-import com.github.AlissonMartin.ong.dtos.InstitutionListRequestDTO;
 import com.github.AlissonMartin.ong.dtos.InstitutionListResponseDTO;
-import com.github.AlissonMartin.ong.models.Institution;
 import com.github.AlissonMartin.ong.services.InstitutionService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/institutions")
+@RequestMapping("/public/institutions")
 public class InstitutionsController {
 
   @Autowired

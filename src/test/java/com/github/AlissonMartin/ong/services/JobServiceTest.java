@@ -49,7 +49,7 @@ class JobServiceTest {
 
         Mockito.when(jobRepository.findJobsWithFilters(jobListRequest.search(), pageable)).thenReturn(jobPage);
 
-        List<JobListResponseDTO> result = jobService.list(jobListRequest);
+        List<JobListResponseDTO> result = jobService.list(jobListRequest.search(), jobListRequest.page(), jobListRequest.size());
 
         assertEquals(result.size(), jobListRequest.size());
     }

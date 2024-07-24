@@ -1,10 +1,10 @@
 package com.github.AlissonMartin.ong.controllers;
 
-import com.github.AlissonMartin.ong.dtos.InstitutionDetailResponseDTO;
-import com.github.AlissonMartin.ong.dtos.InstitutionListResponseDTO;
 import com.github.AlissonMartin.ong.dtos.JobDetailResponseDTO;
 import com.github.AlissonMartin.ong.dtos.JobListResponseDTO;
 import com.github.AlissonMartin.ong.services.JobService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/jobs")
+@RequestMapping("/public/jobs")
 public class JobsController {
 
   @Autowired
@@ -25,7 +25,7 @@ public class JobsController {
 
     return ResponseEntity.ok(institutions);
   }
-
+  @Operation(summary = "Private endpoint", security = @SecurityRequirement(name = "bearerAuth"))
   @GetMapping("/{id}")
   public ResponseEntity<JobDetailResponseDTO> getById(@PathVariable("id") int id) {
     JobDetailResponseDTO job = jobService.getById(id);

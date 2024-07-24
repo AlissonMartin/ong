@@ -31,8 +31,10 @@ public class WebSecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize ->  authorize
                     .requestMatchers(HttpMethod.POST, "/authentication/**").permitAll()
+                    .requestMatchers("/public/**").permitAll()
+                    .requestMatchers("/error").permitAll()
                     .requestMatchers("/organizations/**").hasRole("ORGANIZATION")
-                    .requestMatchers("/error", "/swagger-ui/**").permitAll()
+                    .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                     .anyRequest().authenticated())
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
