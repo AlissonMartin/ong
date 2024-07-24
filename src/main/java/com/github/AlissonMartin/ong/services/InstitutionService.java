@@ -2,8 +2,7 @@ package com.github.AlissonMartin.ong.services;
 
 import com.github.AlissonMartin.ong.dtos.InstitutionDetailResponseDTO;
 import com.github.AlissonMartin.ong.dtos.InstitutionListResponseDTO;
-import com.github.AlissonMartin.ong.dtos.JobDetailResponseDTO;
-import com.github.AlissonMartin.ong.dtos.JobListResponseDTO;
+
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.Institution;
 import com.github.AlissonMartin.ong.repositories.InstitutionRepository;

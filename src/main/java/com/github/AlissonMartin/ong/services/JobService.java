@@ -21,10 +21,10 @@ public class JobService {
     @Autowired
     JobRepository jobRepository;
 
-    public List<JobListResponseDTO> list(JobListRequest data) {
-        Pageable pageable = PageRequest.of(data.page(), data.size());
+    public List<JobListResponseDTO> list(String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<Job> jobs = jobRepository.findJobsWithFilters(data.search(), pageable);
+        Page<Job> jobs = jobRepository.findJobsWithFilters(search, pageable);
 
         return jobs.map(job -> {
             return new JobListResponseDTO(job.getName(), job.getDescription());

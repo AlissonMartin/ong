@@ -1,9 +1,6 @@
 package com.github.AlissonMartin.ong.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -21,5 +18,6 @@ public class Achievement {
 
     private String criteria;
 
+    @OneToMany
     private List<UserAchievement> userAchievements;
 }
