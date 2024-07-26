@@ -1,6 +1,5 @@
 package com.github.AlissonMartin.ong.services;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.AlissonMartin.ong.dtos.*;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -24,6 +22,12 @@ public class UserService {
 
   @Autowired
   PasswordEncoder passwordEncoder;
+
+  @Autowired
+  S3Service s3Service;
+
+  @Autowired
+  AchievementService achievementService;
 
   public User create(RegisterRequestDTO data) {
     User newUser = new User();
@@ -55,15 +59,34 @@ public class UserService {
 
   public UserDetailResponseDTO update(int id, UpdateUserRequestDTO data) {
     User user = userRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
+    String photoUrl = "";
+    if (data.photo() != null) {
+      photoUrl = s3Service.uploadFile(data.photo());
+    }
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+
     try {
-      objectMapper.updateValue(user, data);
+      if (data.name() != null) {
+        user.setName(data.name());
+      }
+      if (data.password() != null) {
+        user.setPassword(data.password());
+      }
+      if (data.federal_tax_id() != null) {
+        user.setFederalTaxId(data.federal_tax_id());
+      }
+      if (data.photo() != null) {
+        user.setPhotoUrl(photoUrl);
+      }
     } catch (Exception e) {
       throw new RuntimeException("Erro ao atualizar o usuário", e);
     }
 
+    if (user.isComplete()) {
+
+    }
     userRepository.save(user);
 
     return new UserDetailResponseDTO(user.getName(), user.getEmail());
