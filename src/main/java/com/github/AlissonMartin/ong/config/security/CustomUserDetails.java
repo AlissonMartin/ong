@@ -1,4 +1,4 @@
-package com.github.AlissonMartin.ong.infra.security;
+package com.github.AlissonMartin.ong.config.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.github.AlissonMartin.ong.infra.security;
+package com.github.AlissonMartin.ong.config.security;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import com.github.AlissonMartin.ong.services.TokenService;

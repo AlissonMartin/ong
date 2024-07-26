@@ -1,4 +1,4 @@
-package com.github.AlissonMartin.ong.infra.security;
+package com.github.AlissonMartin.ong.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
