@@ -1,4 +1,4 @@
-package com.github.AlissonMartin.ong.controllers;
+package com.github.AlissonMartin.ong.controllers.user;
 
 import com.github.AlissonMartin.ong.dtos.UpdateUserRequestDTO;
 import com.github.AlissonMartin.ong.dtos.UserDetailResponseDTO;

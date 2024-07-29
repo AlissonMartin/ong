@@ -9,13 +9,4 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AchievementService {
-
-    @Autowired
-    AchievementRepository achievementRepository;
-
-    Achievement createUserAchievement(User user, Criteria criteria) {
-        if (achievementRepository.findByCriteria(criteria).isEmpty()) {
-
-        }
-    }
 }

@@ -2,8 +2,11 @@ package com.github.AlissonMartin.ong.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.AlissonMartin.ong.dtos.*;
+import com.github.AlissonMartin.ong.enums.Criteria;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
+import com.github.AlissonMartin.ong.models.Achievement;
 import com.github.AlissonMartin.ong.models.User;
+import com.github.AlissonMartin.ong.repositories.AchievementRepository;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +30,10 @@ public class UserService {
   S3Service s3Service;
 
   @Autowired
-  AchievementService achievementService;
+  UserAchievementService userAchievementService;
+
+  @Autowired
+  AchievementRepository achievementRepository;
 
   public User create(RegisterRequestDTO data) {
     User newUser = new User();
@@ -54,7 +60,7 @@ public class UserService {
   public UserDetailResponseDTO findByUsername(String username) {
     User user = userRepository.findByUsername(username).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
 
-    return new UserDetailResponseDTO(user.getName(), user.getEmail());
+    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl());
   }
 
   public UserDetailResponseDTO update(int id, UpdateUserRequestDTO data) {
@@ -85,10 +91,11 @@ public class UserService {
     }
 
     if (user.isComplete()) {
-
+      Achievement achievement = achievementRepository.findByCriteria(Criteria.FULL_PROFILE);
+      userAchievementService.create(user, achievement);
     }
     userRepository.save(user);
 
-    return new UserDetailResponseDTO(user.getName(), user.getEmail());
+    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl());
   }
 }

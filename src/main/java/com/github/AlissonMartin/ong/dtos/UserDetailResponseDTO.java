@@ -1,4 +1,8 @@
 package com.github.AlissonMartin.ong.dtos;
 
-public record UserDetailResponseDTO(String name, String email) {
+import com.github.AlissonMartin.ong.models.Achievement;
+
+import java.util.List;
+
+public record UserDetailResponseDTO(String name, String username, String email, String federalTaxId, String photoUrl) {
 }
