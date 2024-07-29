@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @Entity
@@ -40,6 +41,9 @@ public class User {
     @OneToMany
     private List<UserAchievement> userAchievements;
 
+    @Transient
+    private String verificationCode;
+
     public boolean isComplete() {
         return id != 0 &&
                 StringUtils.isNotBlank(name) &&
@@ -48,5 +52,11 @@ public class User {
                 StringUtils.isNotBlank(password) &&
                 StringUtils.isNotBlank(federalTaxId) &&
                 StringUtils.isNotBlank(photoUrl);
+    }
+
+    public void generateVerificationCode() {
+        if (verificationCode == null) {
+            this.verificationCode = String.valueOf(this.id);
+        }
     }
 }
