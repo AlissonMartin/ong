@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -54,9 +55,20 @@ public class User {
                 StringUtils.isNotBlank(photoUrl);
     }
 
-    public void generateVerificationCode() {
+    public String generateVerificationCode() {
         if (verificationCode == null) {
-            this.verificationCode = String.valueOf(this.id);
+            Random random = new Random();
+            StringBuilder randomNumber = new StringBuilder();
+
+            for (int i = 0; i < 6; i++) {
+                int digit = random.nextInt(10); // Gera um número entre 0 e 9
+                randomNumber.append(digit);
+            }
+
+            this.setVerificationCode(randomNumber.toString());
+            return randomNumber.toString();
+        } else {
+            return null;
         }
     }
 }

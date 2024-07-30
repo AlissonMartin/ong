@@ -8,6 +8,7 @@ import com.github.AlissonMartin.ong.models.Achievement;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.AchievementRepository;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -30,12 +32,15 @@ public class UserService {
   S3Service s3Service;
 
   @Autowired
+  EmailService emailService;
+
+  @Autowired
   UserAchievementService userAchievementService;
 
   @Autowired
   AchievementRepository achievementRepository;
 
-  public User create(RegisterRequestDTO data) {
+  public User create(RegisterRequestDTO data) throws MessagingException, IOException {
     User newUser = new User();
 
     newUser.setName(data.name());
@@ -43,8 +48,11 @@ public class UserService {
     newUser.setPassword(passwordEncoder.encode(data.password()));
     newUser.setFederalTaxId(data.federalTaxId());
     newUser.setRole(data.role());
+    newUser.generateVerificationCode();
 
+    emailService.sendConfirmationEmail(newUser.getEmail(), newUser.getVerificationCode());
     return userRepository.save(newUser);
+
   }
 
   public List<UserListResponseDTO> list(UserListRequestDTO data) {
@@ -71,7 +79,6 @@ public class UserService {
     }
 
     ObjectMapper objectMapper = new ObjectMapper();
-
 
     try {
       if (data.name() != null) {

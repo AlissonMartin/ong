@@ -7,6 +7,7 @@ import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import com.github.AlissonMartin.ong.services.TokenService;
 import com.github.AlissonMartin.ong.services.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -45,7 +47,7 @@ public class AuthenticationController {
   }
 
   @PostMapping("/register")
-  ResponseEntity<RegisterResponseDTO> register(@RequestBody RegisterRequestDTO body) {
+  ResponseEntity<RegisterResponseDTO> register(@RequestBody RegisterRequestDTO body) throws MessagingException, IOException {
     User user = userService.create(body);
 
     String token = tokenService.generateToken(user);
