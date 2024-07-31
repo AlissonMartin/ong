@@ -18,7 +18,7 @@ public class JobsController {
   @Autowired
   JobService jobService;
 
-  @GetMapping("/")
+  @GetMapping
   public ResponseEntity<List<JobListResponseDTO>> list(@RequestParam("search") String search, @RequestParam("page") int page, @RequestParam int size) {
 
     List<JobListResponseDTO> institutions = jobService.list(search, page, size);

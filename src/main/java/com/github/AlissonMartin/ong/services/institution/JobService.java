@@ -1,6 +1,7 @@
 package com.github.AlissonMartin.ong.services.institution;
 
 import com.github.AlissonMartin.ong.dtos.JobCreateRequestDTO;
+import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.Job;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.JobRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class JobService {
@@ -31,5 +33,17 @@ public class JobService {
     job.setInstitution(user.getInstitution());
 
     return jobRepository.save(job);
+  }
+
+  public Job delete(int id) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+
+    Job job = jobRepository.findByIdAndInstitution_Id(id, user.getInstitution().getId()).orElseThrow(()-> new RecordNotFoundException("Trabalho não encontrado."));
+
+    job.setDeletedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+
+    jobRepository.save(job);
+    return job;
   }
 }
