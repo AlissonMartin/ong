@@ -23,6 +23,7 @@ public class Institution {
 
     private String description;
 
+    @Column(unique = true)
     private String federal_tax_id;
 
     private Long cnae;
@@ -44,6 +45,10 @@ public class Institution {
     @ManyToOne
     @JoinColumn(name = "state_id")
     private State state;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private int area_code;
 

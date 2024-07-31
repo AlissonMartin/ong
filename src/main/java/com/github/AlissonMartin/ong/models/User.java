@@ -42,6 +42,10 @@ public class User {
     @OneToMany
     private List<UserAchievement> userAchievements;
 
+    @OneToOne
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
+
     @Transient
     private String verificationCode;
 
