@@ -67,4 +67,7 @@ public class Institution {
     @OneToMany(mappedBy = "institution")
     List<Job> jobs;
 
+    @OneToMany(mappedBy = "institution")
+    List<Certificate> certificates;
+
 }

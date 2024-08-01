@@ -46,4 +46,24 @@ public class JobService {
     jobRepository.save(job);
     return job;
   }
+
+  public Job update(int id, JobCreateRequestDTO data) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+
+    Job job = jobRepository.findByIdAndInstitution_Id(id, user.getInstitution().getId()).orElseThrow(()-> new RecordNotFoundException("Trabalho não encontrado."));
+
+    try {
+      if (data.name() != null) {
+        job.setName(data.name());
+      }
+      if (data.description() != null) {
+        job.setDescription(data.description());
+      }
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao atualizar o usuário", e);
+    }
+
+    return jobRepository.save(job);
+  }
 }
