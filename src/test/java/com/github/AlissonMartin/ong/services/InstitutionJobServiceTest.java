@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JobServiceTest {
+class InstitutionJobServiceTest {
 
     @Mock
     JobRepository jobRepository;

@@ -20,7 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InstitutionServiceTest {
+class UserInstitutionServiceTest {
 
   @Mock
   InstitutionRepository institutionRepository;
