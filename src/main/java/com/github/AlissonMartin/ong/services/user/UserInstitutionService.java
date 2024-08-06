@@ -28,7 +28,7 @@ public class UserInstitutionService {
   @Autowired
   StateRepository stateRepository;
 
-  Institution create(RegisterInstitutionDTO data) {
+  public Institution create(RegisterInstitutionDTO data) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User user = (User) authentication.getPrincipal();
 
