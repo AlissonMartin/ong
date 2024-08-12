@@ -25,6 +25,6 @@ public class Achievement {
     @Enumerated(EnumType.ORDINAL)
     private Criteria criteria;
 
-    @OneToMany
+    @OneToMany(mappedBy = "achievement")
     private List<UserAchievement> userAchievements;
 }

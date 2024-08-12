@@ -71,7 +71,7 @@ public class UserService {
     return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl());
   }
 
-  public UserDetailResponseDTO update(int id, UpdateUserRequestDTO data) {
+  public User update(int id, UpdateUserRequestDTO data) {
     User user = userRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
     String photoUrl = "";
     if (data.photo() != null) {
@@ -101,8 +101,6 @@ public class UserService {
       Achievement achievement = achievementRepository.findByCriteria(Criteria.FULL_PROFILE);
       userAchievementService.create(user, achievement);
     }
-    userRepository.save(user);
-
-    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl());
+    return userRepository.save(user);
   }
 }

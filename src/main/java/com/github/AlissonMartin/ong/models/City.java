@@ -1,12 +1,16 @@
 package com.github.AlissonMartin.ong.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigInteger;
 import java.util.Set;
 
 @Entity
 @Table(name = "cities")
+@Setter
+@Getter
 public class City {
 
     @Id
