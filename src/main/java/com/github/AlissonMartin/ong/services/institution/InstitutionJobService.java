@@ -28,7 +28,7 @@ public class InstitutionJobService {
 
     job.setName(data.name());
     job.setDescription(data.description());
-    job.setPostedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+    job.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
     job.setInstitution(user.getInstitution());
 
     return jobRepository.save(job);

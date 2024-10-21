@@ -8,6 +8,7 @@ import com.github.AlissonMartin.ong.enums.Role;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +38,9 @@ class UserServiceTest {
 
   @Mock
   UserRepository userRepository;
+
+  @Mock
+  EmailService emailService;
 
   @Mock
   PasswordEncoder passwordEncoder;
@@ -50,7 +58,7 @@ class UserServiceTest {
 
   @Test
   @DisplayName("should create a user and return it")
-  void create() {
+  void create() throws MessagingException, IOException {
     User mockUser = new User();
     mockUser.setEmail("test@gmail.com");
     mockUser.setPassword("123");
@@ -128,16 +136,23 @@ class UserServiceTest {
   @DisplayName("should update an user and return it")
   public void updateUser() throws JsonMappingException {
     ObjectMapper objectMapper = new ObjectMapper();
+    MultipartFile multipartFile = new MockMultipartFile(
+            "file",
+            "test-file.txt",
+            "text/plain",
+            "Conteúdo do arquivo".getBytes(StandardCharsets.UTF_8)
+    );
     User user = new User();
     user.setName("test1");
     user.setFederalTaxId("999.999.999-00");
-    UpdateUserRequestDTO data = new UpdateUserRequestDTO("test2", null, "123.456.789-00");
+
+    UpdateUserRequestDTO data = new UpdateUserRequestDTO("test2", null, "123.456.789-00",multipartFile);
 
     Mockito.when(userRepository.findByUsername("test")).thenReturn(Optional.of(user));
 
     User updatedUser = objectMapper.updateValue(user, data);
 
-    UserDetailResponseDTO userDetailResponseDTO = new UserDetailResponseDTO(updatedUser.getName(), updatedUser.getEmail());
+    UserDetailResponseDTO userDetailResponseDTO = new UserDetailResponseDTO(updatedUser.getName(), updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getFederalTaxId(), updatedUser.getPhotoUrl());
 
     UserDetailResponseDTO updatedUserResponse = userService.update(1, data);
 

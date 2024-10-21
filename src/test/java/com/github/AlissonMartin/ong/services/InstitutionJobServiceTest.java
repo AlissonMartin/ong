@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,20 +33,21 @@ class InstitutionJobServiceTest {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
     @DisplayName("should return a list jobs")
     void list() {
         List<Job> jobs = new ArrayList<>();
-        JobListRequest jobListRequest = new JobListRequest("", 15, 0);
-        Pageable pageable = PageRequest.of(jobListRequest.size(), jobListRequest.page());
+        JobListRequest jobListRequest = new JobListRequest("", 15, 1);
+        Pageable pageable = PageRequest.of(jobListRequest.page(), jobListRequest.size());
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 15; i++) {
             jobs.add(new Job());
         }
 
-        Page<Job> jobPage = new PageImpl<>(jobs, pageable, 20);
+        Page<Job> jobPage = new PageImpl<>(jobs, pageable, 15);
 
         Mockito.when(jobRepository.findJobsWithFilters(jobListRequest.search(), pageable)).thenReturn(jobPage);
 
