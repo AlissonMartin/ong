@@ -1,5 +1,8 @@
 package com.github.AlissonMartin.ong.services;
 
+import com.github.AlissonMartin.ong.dtos.InstitutionDetailResponseDTO;
+import com.github.AlissonMartin.ong.dtos.InstitutionListResponseDTO;
+
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.Institution;
 import com.github.AlissonMartin.ong.repositories.InstitutionRepository;
@@ -9,19 +12,27 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InstitutionService {
 
   @Autowired
   InstitutionRepository institutionRepository;
 
-  public Page<Institution> list(String search, int page, int size) {
+  public List<InstitutionListResponseDTO> list(String search, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
 
-    return institutionRepository.findInstitutionsWithFilters(search, pageable);
+    Page<Institution> institutionsPage = institutionRepository.findInstitutionsWithFilters(search, pageable);
+
+    return institutionsPage.map(institution -> {
+      return new InstitutionListResponseDTO(institution.getName(), institution.getDescription());
+    }).stream().toList();
   }
 
-  public Institution getById(int id) {
-    return institutionRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Instituicão não encontrada."));
+  public InstitutionDetailResponseDTO getById(int id) {
+    Institution institution =  institutionRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Instituicão não encontrada."));
+
+    return new InstitutionDetailResponseDTO(institution.getName(), institution.getDescription());
   }
 }

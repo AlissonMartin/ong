@@ -1,6 +1,7 @@
 package com.github.AlissonMartin.ong.controllers.user;
 
 import com.github.AlissonMartin.ong.dtos.UpdateUserRequestDTO;
+import com.github.AlissonMartin.ong.dtos.UserDetailResponseDTO;
 import com.github.AlissonMartin.ong.models.User;
 import com.github.AlissonMartin.ong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,11 @@ public class UsersController {
   UserService userService;
 
   @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<User> update(@ModelAttribute UpdateUserRequestDTO body) {
+  public ResponseEntity<UserDetailResponseDTO> update(@ModelAttribute UpdateUserRequestDTO body) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User userDetails = (User) authentication.getPrincipal();
 
-    User user = userService.update(userDetails.getId(), body);
+    UserDetailResponseDTO user = userService.update(userDetails.getId(), body);
 
     return ResponseEntity.ok(user);
   }

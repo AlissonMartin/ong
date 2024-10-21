@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface InstitutionRepository extends JpaRepository<Institution, Integer> {
 
-  @Query("SELECT i FROM Institution i WHERE (:search IS NULL OR i.name LIKE %:search%)")
+  @Query("SELECT i FROM Institution i WHERE i.name LIKE %:search%")
   Page<Institution> findInstitutionsWithFilters(@Param("search") String search, Pageable pageable);
 }

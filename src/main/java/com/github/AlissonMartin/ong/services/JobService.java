@@ -1,5 +1,9 @@
 package com.github.AlissonMartin.ong.services;
 
+import com.github.AlissonMartin.ong.dtos.JobDetailResponseDTO;
+import com.github.AlissonMartin.ong.dtos.JobListRequest;
+import com.github.AlissonMartin.ong.dtos.JobListResponseDTO;
+import com.github.AlissonMartin.ong.dtos.UserListResponseDTO;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.Job;
 import com.github.AlissonMartin.ong.repositories.JobRepository;
@@ -9,22 +13,28 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class JobService {
 
     @Autowired
     JobRepository jobRepository;
 
-    public Page<Job> list(String search, int page, int size) {
+    public List<JobListResponseDTO> list(String search, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Job> jobs = jobRepository.findJobsWithFilters(search, pageable);
 
-        return jobs;
+        return jobs.map(job -> {
+            return new JobListResponseDTO(job.getName(), job.getDescription());
+        }).stream().toList();
     }
 
-    public Job getById(int id) {
-        return jobRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Trabalho não encontrado."));
+    public JobDetailResponseDTO getById(int id) {
+        Job job = jobRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Trabalho não encontrado."));
+
+        return new JobDetailResponseDTO(job.getName(), job.getDescription());
     }
 
 }
