@@ -87,8 +87,8 @@ public class UserService {
       if (data.password() != null) {
         user.setPassword(data.password());
       }
-      if (data.federal_tax_id() != null) {
-        user.setFederalTaxId(data.federal_tax_id());
+      if (data.federalTaxId() != null) {
+        user.setFederalTaxId(data.federalTaxId());
       }
       if (data.photo() != null) {
         user.setPhotoUrl(photoUrl);

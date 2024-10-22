@@ -40,6 +40,9 @@ class UserServiceTest {
   UserRepository userRepository;
 
   @Mock
+  S3Service s3Service;
+
+  @Mock
   EmailService emailService;
 
   @Mock
@@ -148,7 +151,7 @@ class UserServiceTest {
 
     UpdateUserRequestDTO data = new UpdateUserRequestDTO("test2", null, "123.456.789-00",multipartFile);
 
-    Mockito.when(userRepository.findByUsername("test")).thenReturn(Optional.of(user));
+    Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
     User updatedUser = objectMapper.updateValue(user, data);
 

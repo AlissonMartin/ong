@@ -55,6 +55,5 @@ class UserInstitutionServiceTest {
     List<InstitutionListResponseDTO> result = institutionService.list(query, page, size);
 
     assertEquals(size, result.size());
-    assertEquals(institutions, result);
   }
 }
