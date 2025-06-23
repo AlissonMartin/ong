@@ -33,7 +33,7 @@ public class WebSecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/authentication/**").permitAll()
                     .requestMatchers("/public/**").permitAll()
                     .requestMatchers("/error").permitAll()
-                    .requestMatchers("/institution/**").hasRole("ORGANIZATION")
+                    .requestMatchers("/institution/**").hasRole("INSTITUTION")
                     .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                     .anyRequest().authenticated())
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

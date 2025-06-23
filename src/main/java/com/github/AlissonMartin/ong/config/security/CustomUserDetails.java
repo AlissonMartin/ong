@@ -1,35 +1,31 @@
 package com.github.AlissonMartin.ong.config.security;
 
+import com.github.AlissonMartin.ong.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
-    private int id;
-    private String username;
-    private String password;
+    private User user;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(int id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.authorities = authorities;
+    public CustomUserDetails(User user) {
+        this.user = user;
     }
 
-    public int getId() {
-        return id;
+    public User getUser() {
+        return user;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return user.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
