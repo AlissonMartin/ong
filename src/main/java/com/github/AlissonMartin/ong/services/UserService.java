@@ -22,6 +22,14 @@ import java.util.List;
 @Service
 public class UserService {
 
+  private  AchievementService achievementService;
+    @Autowired
+    private UserAchievementService userAchievementService;
+
+  UserService(AchievementService achievementService) {
+    this.achievementService = achievementService;
+  }
+
   @Autowired
   UserRepository userRepository;
 
@@ -33,12 +41,6 @@ public class UserService {
 
   @Autowired
   EmailService emailService;
-
-  @Autowired
-  UserAchievementService userAchievementService;
-
-  @Autowired
-  AchievementRepository achievementRepository;
 
   public User create(RegisterRequestDTO data) throws MessagingException, IOException {
     User newUser = new User();
@@ -97,10 +99,7 @@ public class UserService {
       throw new RuntimeException("Erro ao atualizar o usuário", e);
     }
 
-    if (user.isComplete()) {
-      Achievement achievement = achievementRepository.findByCriteria(Criteria.FULL_PROFILE);
-      userAchievementService.create(user, achievement);
-    }
+    userAchievementService.FullProfile(user);
     userRepository.save(user);
 
     return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl());

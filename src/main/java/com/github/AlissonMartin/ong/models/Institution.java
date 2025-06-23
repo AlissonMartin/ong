@@ -65,9 +65,7 @@ public class Institution {
     private String email;
 
     @OneToMany(mappedBy = "institution")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Job> jobs;
-
-    @OneToMany(mappedBy = "institution")
-    List<Certificate> certificates;
 
 }
