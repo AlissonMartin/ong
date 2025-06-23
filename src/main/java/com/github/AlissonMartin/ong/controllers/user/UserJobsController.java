@@ -23,10 +23,8 @@ public class UserJobsController {
 
   @PostMapping(value = "/{id}/job_application", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<JobApplication> createJobApplication(@PathVariable int id, MultipartFile curriculum) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    User userDetails = (User) authentication.getPrincipal();
 
-    JobApplication jobApplication = jobApplicationService.create(userDetails.getId(), id, curriculum);
+    JobApplication jobApplication = jobApplicationService.create(id, curriculum);
 
     return ResponseEntity.ok(jobApplication);
   }

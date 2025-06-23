@@ -15,7 +15,7 @@ public class InstitutionJobsController {
     InstitutionJobService institutionJobService;
 
     @PostMapping
-    public ResponseEntity<Job> create(JobCreateRequestDTO body) {
+    public ResponseEntity<Job> create(@RequestBody JobCreateRequestDTO body) {
         Job job = institutionJobService.create(body);
         return ResponseEntity.ok(job);
     }

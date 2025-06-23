@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class InstitutionJobService {
@@ -64,5 +65,20 @@ public class InstitutionJobService {
     }
 
     return jobRepository.save(job);
+  }
+
+  public Job getById(int id) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+
+    return jobRepository.findByIdAndInstitution_Id(id, user.getInstitution().getId())
+            .orElseThrow(() -> new RecordNotFoundException("Trabalho não encontrado."));
+  }
+
+  public List<Job> list() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+
+    return jobRepository.findAllByInstitution_IdAndDeletedAtIsNull(user.getInstitution().getId());
   }
 }

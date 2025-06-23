@@ -9,6 +9,8 @@ import com.github.AlissonMartin.ong.repositories.JobRepository;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import com.github.AlissonMartin.ong.services.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,17 +31,42 @@ public class JobApplicationService {
   @Autowired
   JobApplicationRepository jobApplicationRepository;
 
-  public JobApplication create(int userId, int jobId, MultipartFile curriculum) {
-    Optional<User> user = userRepository.findById(userId);
+  public JobApplication create(int jobId, MultipartFile curriculum) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
     Optional<Job> job = jobRepository.findById(jobId);
 
     JobApplication jobApplication = new JobApplication();
 
-    jobApplication.setUser(user.get());
+    jobApplication.setUser(user);
     jobApplication.setJob(job.get());
     jobApplication.setCurriculumUrl(s3Service.uploadFile(curriculum));
     jobApplication.setStatus(JobApplicationStatus.OPEN);
 
     return jobApplicationRepository.save(jobApplication);
+  }
+
+  public Optional<JobApplication> getById(int id) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+    return jobApplicationRepository.findByIdAndUser(id, user);
+  }
+
+  public Iterable<JobApplication> list() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+
+    return jobApplicationRepository.findAllByUser(user);
+  }
+
+  public JobApplication updateStatus(int id, JobApplicationStatus status) {
+    JobApplication jobApplication = jobApplicationRepository.findById(id)
+      .orElseThrow(() -> new RuntimeException("JobApplication não encontrada"));
+    jobApplication.setStatus(status);
+    return jobApplicationRepository.save(jobApplication);
+  }
+
+  public void delete(int id) {
+    jobApplicationRepository.deleteById(id);
   }
 }
