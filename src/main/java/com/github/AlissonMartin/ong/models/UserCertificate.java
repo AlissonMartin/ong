@@ -1,21 +1,22 @@
 package com.github.AlissonMartin.ong.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "user_certificates")
+@Getter
+@Setter
 public class UserCertificate {
 
   @Id
   @GeneratedValue
   private int id;
 
-  @ManyToOne
-  @JoinColumn(name = "certificate_id")
-  private Certificate certificate;
+  private String certificateName;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
