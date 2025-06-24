@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,15 +39,16 @@ public class AuthenticationController {
   }
 
   @PostMapping("/login")
-  ResponseEntity<String> login(@RequestBody LoginRequestDTO body) {
+  ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestDTO body) {
     Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(body.email(), body.password())
     );
     CustomUserDetails userAuthenticated = (CustomUserDetails) authentication.getPrincipal();
 
     String token  = tokenService.generateToken(userAuthenticated.getUser());
-
-    return ResponseEntity.ok(token);
+    Map<String, String> response = new HashMap<>();
+    response.put("token", token);
+    return ResponseEntity.ok(response);
   }
 
   @PostMapping("/register")
