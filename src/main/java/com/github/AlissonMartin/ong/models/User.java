@@ -42,6 +42,9 @@ public class User {
     @OneToMany
     private List<UserAchievement> userAchievements;
 
+    @OneToMany
+    private List<JobApplication> jobApplications;
+
     @OneToOne
     @JoinColumn(name = "institution_id")
     private Institution institution;

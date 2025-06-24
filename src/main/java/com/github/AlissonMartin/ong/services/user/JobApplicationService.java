@@ -1,12 +1,12 @@
 package com.github.AlissonMartin.ong.services.user;
 
+import com.github.AlissonMartin.ong.enums.Criteria;
 import com.github.AlissonMartin.ong.enums.JobApplicationStatus;
 import com.github.AlissonMartin.ong.models.Job;
 import com.github.AlissonMartin.ong.models.JobApplication;
 import com.github.AlissonMartin.ong.models.User;
-import com.github.AlissonMartin.ong.repositories.JobApplicationRepository;
-import com.github.AlissonMartin.ong.repositories.JobRepository;
-import com.github.AlissonMartin.ong.repositories.UserRepository;
+import com.github.AlissonMartin.ong.models.UserAchievement;
+import com.github.AlissonMartin.ong.repositories.*;
 import com.github.AlissonMartin.ong.services.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,13 +23,16 @@ public class JobApplicationService {
   S3Service s3Service;
 
   @Autowired
-  UserRepository userRepository;
+  AchievementRepository achievementRepository;
 
   @Autowired
   JobRepository jobRepository;
 
   @Autowired
   JobApplicationRepository jobApplicationRepository;
+
+  @Autowired
+  private UserAchievementRepository userAchievementRepository;
 
   public JobApplication create(int jobId, MultipartFile curriculum) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -38,10 +41,20 @@ public class JobApplicationService {
 
     JobApplication jobApplication = new JobApplication();
 
+    if (user.getJobApplications() == null) {
+      UserAchievement userAchievement = new UserAchievement();
+      userAchievement.setUser(user);
+
+      userAchievement.setAchievement(achievementRepository.findByCriteria(Criteria.FIRSTAPPLY));
+
+      userAchievementRepository.save(userAchievement);
+    }
+
     jobApplication.setUser(user);
     jobApplication.setJob(job.get());
     jobApplication.setCurriculumUrl(s3Service.uploadFile(curriculum));
     jobApplication.setStatus(JobApplicationStatus.OPEN);
+
 
     return jobApplicationRepository.save(jobApplication);
   }
