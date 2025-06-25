@@ -68,4 +68,8 @@ public class Institution {
     @com.fasterxml.jackson.annotation.JsonIgnore
     List<Job> jobs;
 
+    @OneToMany(mappedBy = "institution")
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    List<Post> posts;
+
 }

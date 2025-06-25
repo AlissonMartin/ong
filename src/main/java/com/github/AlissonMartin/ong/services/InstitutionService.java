@@ -26,13 +26,46 @@ public class InstitutionService {
     Page<Institution> institutionsPage = institutionRepository.findInstitutionsWithFilters(search, pageable);
 
     return institutionsPage.map(institution -> {
-      return new InstitutionListResponseDTO(institution.getName(), institution.getDescription());
+      return new InstitutionListResponseDTO(
+        institution.getId(),
+        institution.getFull_name(),
+        institution.getName(),
+        institution.getDescription(),
+        institution.getFederal_tax_id(),
+        institution.getCnae(),
+        institution.getAddress(),
+        institution.getNumber(),
+        institution.getComplement(),
+        institution.getDistrict(),
+        institution.getZip(),
+        institution.getCity() != null ? institution.getCity().getName() : null,
+        institution.getState() != null ? institution.getState().getName() : null,
+        institution.getEmail(),
+        institution.getPosts(),
+        institution.getJobs()
+      );
     }).stream().toList();
   }
 
   public InstitutionDetailResponseDTO getById(int id) {
-    Institution institution =  institutionRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Instituicão não encontrada."));
-
-    return new InstitutionDetailResponseDTO(institution.getName(), institution.getDescription());
+    Institution institution =  institutionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Instituicão não encontrada."));
+    return new InstitutionDetailResponseDTO(
+        institution.getId(),
+        institution.getFull_name(),
+        institution.getName(),
+        institution.getDescription(),
+        institution.getFederal_tax_id(),
+        institution.getCnae(),
+        institution.getAddress(),
+        institution.getNumber(),
+        institution.getComplement(),
+        institution.getDistrict(),
+        institution.getZip(),
+        institution.getCity() != null ? institution.getCity().getName() : null,
+        institution.getState() != null ? institution.getState().getName() : null,
+        institution.getEmail(),
+        institution.getPosts(),
+        institution.getJobs()
+    );
   }
 }
