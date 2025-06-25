@@ -12,17 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/public/posts")
+@RequestMapping("/public")
 public class PostsController {
     @Autowired
     private PostService postService;
 
-    @GetMapping
-    public List<PostResponseDTO> listAll() {
-        return postService.listAll();
+    @GetMapping("/institutions/{id}/posts")
+    public List<PostResponseDTO> listAll(@PathVariable int id) {
+
+        return postService.listAll(id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/posts/{id}")
     public ResponseEntity<PostResponseDTO> findById(@PathVariable int id) {
         return postService.findById(id)
                 .map(ResponseEntity::ok)

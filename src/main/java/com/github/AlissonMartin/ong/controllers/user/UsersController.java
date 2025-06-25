@@ -28,4 +28,12 @@ public class UsersController {
     return ResponseEntity.ok(user);
   }
 
+  @GetMapping("/show")
+  public ResponseEntity<UserDetailResponseDTO> getMe() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User userDetails = (User) authentication.getPrincipal();
+    UserDetailResponseDTO user = userService.findByEmail(userDetails.getEmail());
+    return ResponseEntity.ok(user);
+  }
+
 }

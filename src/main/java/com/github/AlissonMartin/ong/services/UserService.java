@@ -6,6 +6,7 @@ import com.github.AlissonMartin.ong.enums.Criteria;
 import com.github.AlissonMartin.ong.exceptions.RecordNotFoundException;
 import com.github.AlissonMartin.ong.models.Achievement;
 import com.github.AlissonMartin.ong.models.User;
+import com.github.AlissonMartin.ong.models.UserAchievement;
 import com.github.AlissonMartin.ong.repositories.AchievementRepository;
 import com.github.AlissonMartin.ong.repositories.UserRepository;
 import jakarta.mail.MessagingException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -68,20 +70,26 @@ public class UserService {
   }
 
   public UserDetailResponseDTO findByUsername(String username) {
-    User user = userRepository.findByUsername(username).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
+    User user = userRepository.findByUsername(username).orElseThrow(() -> new RecordNotFoundException("Usuário não encontrado"));
+    List<Achievement> achievements = user.getUserAchievements() != null ?
+      user.getUserAchievements().stream().map(UserAchievement::getAchievement).collect(Collectors.toList()) : List.of();
+    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl(), achievements);
+  }
 
-    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl());
+  public UserDetailResponseDTO findByEmail(String email) {
+    User user = userRepository.findByEmail(email).orElseThrow(() -> new RecordNotFoundException("Usuário não encontrado"));
+    List<Achievement> achievements = user.getUserAchievements() != null ?
+      user.getUserAchievements().stream().map(UserAchievement::getAchievement).collect(Collectors.toList()) : List.of();
+    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl(), achievements);
   }
 
   public UserDetailResponseDTO update(int id, UpdateUserRequestDTO data) {
-    User user = userRepository.findById(id).orElseThrow(()-> new RecordNotFoundException("Usuário não encontrado"));
+    User user = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Usuário não encontrado"));
     String photoUrl = "";
     if (data.photo() != null) {
       photoUrl = s3Service.uploadFile(data.photo());
     }
-
     ObjectMapper objectMapper = new ObjectMapper();
-
     try {
       if (data.name() != null) {
         user.setName(data.name());
@@ -98,10 +106,10 @@ public class UserService {
     } catch (Exception e) {
       throw new RuntimeException("Erro ao atualizar o usuário", e);
     }
-
     userAchievementService.FullProfile(user);
     userRepository.save(user);
-
-    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl());
+    List<Achievement> achievements = user.getUserAchievements() != null ?
+      user.getUserAchievements().stream().map(UserAchievement::getAchievement).collect(Collectors.toList()) : List.of();
+    return new UserDetailResponseDTO(user.getName(), user.getUsername(), user.getEmail(), user.getFederalTaxId(), user.getPhotoUrl(), achievements);
   }
 }
