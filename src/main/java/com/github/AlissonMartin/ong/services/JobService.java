@@ -37,4 +37,11 @@ public class JobService {
         return new JobDetailResponseDTO(job.getName(), job.getDescription());
     }
 
+    public List<JobListResponseDTO> listByInstitution(int institutionId) {
+        List<Job> jobs = jobRepository.findAllByInstitution_IdAndDeletedAtIsNull(institutionId);
+        return jobs.stream()
+                .map(job -> new JobListResponseDTO(job.getName(), job.getDescription()))
+                .toList();
+    }
+
 }
