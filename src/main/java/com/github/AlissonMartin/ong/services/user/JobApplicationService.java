@@ -53,7 +53,7 @@ public class JobApplicationService {
     jobApplication.setUser(user);
     jobApplication.setJob(job.get());
     jobApplication.setCurriculumUrl(s3Service.uploadFile(curriculum));
-    jobApplication.setStatus(JobApplicationStatus.OPEN);
+    jobApplication.setStatus(JobApplicationStatus.ONGOING);
 
 
     return jobApplicationRepository.save(jobApplication);
@@ -83,3 +83,5 @@ public class JobApplicationService {
     jobApplicationRepository.deleteById(id);
   }
 }
+
+

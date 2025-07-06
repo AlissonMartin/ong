@@ -1,4 +1,4 @@
 package com.github.AlissonMartin.ong.dtos;
 
-public record JobListResponseDTO(String name, String description) {
+public record JobListResponseDTO(int id, String name, String description) {
 }

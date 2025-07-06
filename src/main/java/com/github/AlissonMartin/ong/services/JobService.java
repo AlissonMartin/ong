@@ -27,7 +27,7 @@ public class JobService {
         Page<Job> jobs = jobRepository.findJobsWithFilters(search, pageable);
 
         return jobs.map(job -> {
-            return new JobListResponseDTO(job.getName(), job.getDescription());
+            return new JobListResponseDTO(job.getId(), job.getName(), job.getDescription());
         }).stream().toList();
     }
 
@@ -40,7 +40,7 @@ public class JobService {
     public List<JobListResponseDTO> listByInstitution(int institutionId) {
         List<Job> jobs = jobRepository.findAllByInstitution_IdAndDeletedAtIsNull(institutionId);
         return jobs.stream()
-                .map(job -> new JobListResponseDTO(job.getName(), job.getDescription()))
+                .map(job -> new JobListResponseDTO(job.getId(),job.getName(), job.getDescription()))
                 .toList();
     }
 

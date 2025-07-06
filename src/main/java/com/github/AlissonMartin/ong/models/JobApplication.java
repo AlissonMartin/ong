@@ -33,4 +33,7 @@ public class JobApplication {
   @ManyToOne
   @JoinColumn(name = "job_id")
   private Job job;
+
+  @OneToOne
+  private UserCertificate userCertificate;
 }

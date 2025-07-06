@@ -1,4 +1,6 @@
 package com.github.AlissonMartin.ong.dtos;
 
-public record JobCreateRequestDTO(String name, String description) {
+import org.springframework.web.multipart.MultipartFile;
+
+public record JobCreateRequestDTO(String name, String description, MultipartFile image) {
 }
