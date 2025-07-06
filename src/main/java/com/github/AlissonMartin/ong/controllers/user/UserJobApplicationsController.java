@@ -18,8 +18,8 @@ public class UserJobApplicationsController {
 
     @PostMapping
     public ResponseEntity<JobApplication> create(@RequestParam int jobId, @RequestParam MultipartFile curriculum) {
-        JobApplication jobApplication = jobApplicationService.create(jobId, curriculum);
-        return ResponseEntity.ok(jobApplication);
+        jobApplicationService.create(jobId, curriculum);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping

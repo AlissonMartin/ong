@@ -5,8 +5,11 @@ import com.github.AlissonMartin.ong.dtos.PostResponseDTO;
 import com.github.AlissonMartin.ong.models.Post;
 import com.github.AlissonMartin.ong.services.institution.InstitutionPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -16,8 +19,8 @@ public class InstitutionPostsController {
     @Autowired
     InstitutionPostService institutionPostService;
 
-    @PostMapping
-    public ResponseEntity<PostResponseDTO> create(@RequestBody PostCreateRequestDTO body) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PostResponseDTO> create(@ModelAttribute PostCreateRequestDTO body) {
         PostResponseDTO post = institutionPostService.create(body);
 
         return ResponseEntity.ok(post);
