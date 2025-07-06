@@ -39,10 +39,10 @@ public class User {
 
     private String photoUrl;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<UserAchievement> userAchievements;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<JobApplication> jobApplications;
 
     @OneToOne

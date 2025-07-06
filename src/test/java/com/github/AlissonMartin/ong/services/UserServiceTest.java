@@ -155,7 +155,7 @@ class UserServiceTest {
 
     User updatedUser = objectMapper.updateValue(user, data);
 
-    UserDetailResponseDTO userDetailResponseDTO = new UserDetailResponseDTO(updatedUser.getName(), updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getFederalTaxId(), updatedUser.getPhotoUrl());
+    UserDetailResponseDTO userDetailResponseDTO = new UserDetailResponseDTO(updatedUser.getName(), updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getFederalTaxId(), updatedUser.getPhotoUrl(), new ArrayList<>());
 
     UserDetailResponseDTO updatedUserResponse = userService.update(1, data);
 

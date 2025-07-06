@@ -89,7 +89,7 @@ public class UserService {
     if (data.photo() != null) {
       photoUrl = s3Service.uploadFile(data.photo());
     }
-    ObjectMapper objectMapper = new ObjectMapper();
+
     try {
       if (data.name() != null) {
         user.setName(data.name());
