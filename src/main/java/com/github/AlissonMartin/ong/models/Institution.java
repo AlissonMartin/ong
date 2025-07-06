@@ -64,6 +64,11 @@ public class Institution {
 
     private String email;
 
+    @Column(length = 1024)
+    private String profilePhotoUrl;
+    @Column(length = 1024)
+    private String bannerUrl;
+
     @OneToMany(mappedBy = "institution")
     @com.fasterxml.jackson.annotation.JsonIgnore
     List<Job> jobs;

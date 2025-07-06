@@ -19,6 +19,8 @@ public record InstitutionDetailResponseDTO(
     String city,
     String state,
     String email,
-    List<Post> posts,
-    List<Job> jobs
+    String profilePhotoUrl,
+    String bannerUrl,
+    List<PostSimpleResponseDTO> posts,
+    List<JobSimpleResponseDTO> jobs
 ) {}
