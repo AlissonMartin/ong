@@ -32,6 +32,17 @@ public class UserAchievementService {
     return null;
   }
 
+  public UserAchievement FirstChosenApply(User user) {
+    // Verifica se o usuário já tem algum JobApplication com status CHOSEN
+    boolean hasChosen = user.getJobApplications() != null &&
+      user.getJobApplications().stream().anyMatch(app -> app.getStatus() != null && app.getStatus().name().equals("CHOSEN"));
+    if (!hasChosen) {
+      Achievement achievement = achievementRepository.findByCriteria(Criteria.FIRSTCHOSENAPPLY);
+      return create(user, achievement);
+    }
+    return null;
+  }
+
   UserAchievement create(User user, Achievement achievement) {
     if (userHasAchievement(user, achievement) == false) {
       UserAchievement userAchievement = new UserAchievement();

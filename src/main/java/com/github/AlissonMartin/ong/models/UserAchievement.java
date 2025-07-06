@@ -27,5 +27,8 @@ public class UserAchievement {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "dateAchieved", updatable = false)
+    @org.hibernate.annotations.CreationTimestamp
     private Date dateAchieved;
 }
