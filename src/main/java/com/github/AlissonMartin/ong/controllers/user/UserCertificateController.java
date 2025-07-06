@@ -32,11 +32,11 @@ public class UserCertificateController {
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserCertificateResponseDTO> update(@PathVariable int id, @RequestBody UserCertificateCreateRequestDTO dto) {
-        UserCertificateResponseDTO updated = userCertificateService.update(id, dto);
-        return ResponseEntity.ok(updated);
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<UserCertificateResponseDTO> update(@PathVariable int id, @RequestBody UserCertificateCreateRequestDTO dto) {
+//        UserCertificateResponseDTO updated = userCertificateService.update(id, dto);
+//        return ResponseEntity.ok(updated);
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {

@@ -1,5 +1,6 @@
 package com.github.AlissonMartin.ong.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,11 @@ public class UserCertificate {
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
+
+  @OneToOne
+  @JoinColumn(name = "job_application_id")
+  @JsonIgnore
+  private JobApplication jobApplication;
 
   @Temporal(TemporalType.DATE)
   private Date acquiredAt;
